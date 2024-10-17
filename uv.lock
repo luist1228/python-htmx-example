@@ -462,12 +462,14 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
+    { name = "jinja2" },
     { name = "sqlmodel" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.2" },
+    { name = "jinja2", specifier = ">=3.1.4" },
     { name = "sqlmodel", specifier = ">=0.0.22" },
 ]
 
