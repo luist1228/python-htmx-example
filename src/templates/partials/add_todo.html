@@ -1,0 +1,29 @@
+<form
+		method="POST"
+		action="/todos"
+		hx-post="/todos"
+		hx-target="#app-content"
+		hx-swap="innerHTML"
+		class="flex flex-row min-w-0  items-center gap-2"
+		hx-disabled-elt="this"
+		hx-replace-url
+	>
+		<span class="min-w-20">Add Todo</span>
+		<input
+			type="text"
+			placeholder="Add new todo "
+			class="input input-bordered min-w-0 flex-1 "
+			name="title"
+		/>
+		<button
+			type="submit"
+			class="btn btn-primary  min-w-20 "
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+			</svg>
+
+
+			<span id="indicator" class="loading loading-spinner htmx-indicator"></span>
+		</button>
+	</form>

@@ -1,3 +1,5 @@
+/src/content/**.html
+
 node_modules
 
 todo_db.db

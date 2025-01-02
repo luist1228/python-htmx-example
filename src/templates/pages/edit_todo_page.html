@@ -1,0 +1,108 @@
+{% macro edit_todo_content() -%}
+  <form
+		action="{{"/todos/edit/"+todo.id|string|safe}}"
+		method="POST"
+		hx-put="{{"/todos/edit/"+todo.id|string|safe}}"
+		hx-swap="innerHTML"
+		hx-target="#app-content"
+		hx-push-url="true"
+		class="grow flex flex-col gap-2 justify-between "
+	>
+		<div class=" flex flex-col flex-initial">
+      {{header}}
+    </div>
+    <div class="flex-auto flex flex-col items-center h-96 overflow-auto ">
+        {{description}}
+    
+    </div>
+    <div class="flex-intial flex flex-col">
+			<button class="btn btn-primary btn-block"
+			type="submit"
+			hx-disabled-elt="this"
+			>
+				Save Changes
+				<span class="htmx-indicator loading loading-spinner"></span>
+			</button>
+    </div>		
+	</form>
+
+	
+{%- endmacro %}
+
+
+
+{% set header -%}
+	<div class="flex flex-row justify-between items-center gap-2 label">
+		<div class="flex flex-row gap-2 items-center">
+			<input type="hidden" name="done" value=False>
+			<input
+				name="done"
+				class="checkbox checkbox-success"
+				type="checkbox" 
+				{% if todo.done  %}
+					checked
+				{% endif %}
+			/>
+			<h2 class="text-lg font-bold">
+				{{todo.title}}
+			</h2>
+			<input type="hidden" name="title" value="{{todo.title}}">
+		</div>
+		<div class="flex">
+			<a
+				class="btn btn-primary btn-sm"
+				href="{{"/todos/" + todo.id|string  }} " 
+				hx-get="{{"/todos/" + todo.id|string  }} " 
+				hx-trigger="click" 
+				hx-target="#app-content" 
+				hx-swap="innerHTML" 
+				hx-replace-url="true"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+				</svg>
+
+			</a>
+		</div>
+	</div>
+	
+	<div class="label">
+		Description
+
+		<button 
+			id="preview-btn" 
+			class="btn btn-sm btn-secondary" 
+			type="button"
+			hx-on:click="togglePreview()"
+
+			>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+			</svg>
+		</button>
+	</div>
+{%- endset %}
+
+{% set description -%}	
+	<textarea
+		name="description"
+		id="description"
+		class="textarea lg:textarea-md textarea-lg textarea-bordered textarea-accent w-full h-full leading-snug"
+	>{{todo.description}}</textarea>
+	<div class="prose prose-2xl lg:prose-base p-1 w-full hidden" id="preview">
+		{{md|safe}}
+	</div>
+{%- endset %}
+
+{% if todo %}
+	{% if isHtmx %}
+		{{edit_todo_content()}}
+	{% else %}
+		{% extends "layouts/main_layout.html" %}
+		{% block content %}
+			{{edit_todo_content()}}
+		{% endblock %}
+	{% endif %}
+
+{% endif %}

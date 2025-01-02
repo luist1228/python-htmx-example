@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>{% block title %}{{ title }}{% endblock title %}</title>
+	{# Load necesary scripts #}
+	<script 
+		src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+	<script 
+		src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+	<script 
+		src="https://unpkg.com/htmx.org@2.0.3"
+		integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"
+	></script>
+
+	<script 
+		
+		src="/static/app.js"
+		></script>
+
+
+	{# Fonts #}
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	
+	{# styles #}
+	<link rel="stylesheet" href="/static/css/tailwind.css" />
+	<script>
+		// Change localStorage setItem function so that it emits change event within the same page
+		const origSetItem = window.localStorage.setItem;
+
+		window.localStorage.setItem = function setItem(key, value) {
+			// Retrieve old value before we store the new one
+			let oldValue = window.localStorage.getItem(key);
+			// Store in LocalStorage
+			const result = origSetItem.apply(this, arguments);
+
+			// Manually fire a "storage" event so this window is alerted. On its own, 
+			// localStorage.setItem() only fires a "storage" event for other tabs.
+			const e = new StorageEvent("storage", {
+				storageArea: window.localStorage,
+				key,
+				oldValue,
+				newValue: value,
+				url: window.location.href,
+			});
+			window.dispatchEvent(e);
+
+			return result;
+		}
+	</script>
+
+	
+</head>
+
+<body>
+	<main class="min-h-screen flex flex-col items-center h-full bg-base-300">
+		{% include "partials/navbar.html" %}
+		<section class="flex-1 flex flex-col items-stretch pt-4  w-full lg:w-1/2 ">
+			<div 
+				id="app-content" 
+				class="flex flex-col flex-1 h-full mb-2 bg-base-100 p-4 rounded-btn"
+			>
+				{% block content %}
+				<h1>Welcome to {{ title }}!</h1>
+				{% endblock content %}
+			</div>
+		</section>
+	</main>
+</body>
+
+</html>

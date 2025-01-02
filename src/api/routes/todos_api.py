@@ -27,7 +27,7 @@ def create_todo(
   session: SessionDep,
   todo_in: TodoCreate
 ) -> Any:
-  return todos_model.create_todo_crud(session, todo_in)
+  return todos_model.create_todo(session, todo_in)
 
 
 @router.put("/{id}", response_model=TodoPublic)

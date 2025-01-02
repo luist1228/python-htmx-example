@@ -7,5 +7,8 @@ requires-python = ">=3.10"
 dependencies = [
     "fastapi[standard]>=0.115.2",
     "jinja2>=3.1.4",
+    "markdown-checklist>=0.4.4",
+    "markdown>=3.7",
+    "minify-html>=0.15.0",
     "sqlmodel>=0.0.22",
 ]

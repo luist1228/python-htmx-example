@@ -1,0 +1,18 @@
+{% macro check_content() -%}
+  {% block template %}{% endblock %}
+{%- endmacro %}
+
+
+{% if isHtmx %}
+  {% extends "layouts/htmx_layout.html" %}
+  {% block content %}
+    {{ check_content() }}
+  {% endblock %}
+{% else %}
+  {% extends "layouts/no_htmx_layout.html" %}
+  {% block no_htmx_content %}
+    {{check_content()}}
+  {% endblock %}
+{% endif %}
+
+

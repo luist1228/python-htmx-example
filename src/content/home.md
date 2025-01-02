@@ -36,7 +36,7 @@ The manually start the development server
 $ fastapi dev src/main.py
 ```
 
-If you are modifying any styles in a separte console run in order to generate css when any src/template/**.html files are modified
+If you are modifying any styles in a separte console run the following command in order to generate the static css for tailwind when any .html files are modified
 ```console
 $ npm run watch
 ```

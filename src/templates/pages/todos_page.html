@@ -1,0 +1,69 @@
+{% macro todos_content() -%}
+  <form
+		method="POST"
+		action="/todos/sort"
+		hx-post="/todos/sort"
+		hx-trigger="custom-end"
+		hx-target="#todos"
+		hx-swap="none"
+		id="sort-form"
+		enctype="multipart/form-data"
+	></form>
+  <div class="grow flex flex-col justify-between ">
+    <div class=" h-20 flex-initial">
+      {% include "partials/search_todo.html" %}
+    </div>
+    <div class="flex-auto h-96 overflow-scroll ">
+      <div class="max-h-full block">
+        {% include "partials/todos_list.html" %}
+      </div>
+    
+    </div>
+    <div class="flex-intial">
+      {% include "partials/add_todo.html" %}
+    </div>
+  </div>
+
+  <script>
+    htmx.on("end", (e)=>{
+      console.log(e.from)
+      const form = document.getElementById("sort-form")
+      if(form){
+        form.replaceChildren("")
+      }
+      const todos = document.querySelectorAll("input[name='sort-id']")
+      if(todos.length > 0 ){
+        todos.forEach((input)=>{
+          console.log(input.value)
+          const newInput= document.createElement("input")
+          newInput.setAttribute("type","hidden")
+          newInput.setAttribute("name","id")
+          newInput.setAttribute("value", input.value)
+          form.appendChild(newInput)
+          htmx.process(newInput)
+        })
+        htmx.trigger("#sort-form","custom-end")
+
+        htmx.on("htmx:afterSwap", function(){
+          form.replaceChildren("")
+        })
+      }
+	  })
+
+  </script>
+  <title>Todos</title>
+{%- endmacro %}
+
+
+
+{% if isHtmx %}
+  {% extends "layouts/htmx_layout.html" %}
+  {% block content %}
+    {{todos_content()}}
+  {% endblock %}
+{% else %}
+  {% extends "layouts/no_htmx_layout.html" %}
+  {% block htmx_content %}
+    {{todos_content()}}
+  {% endblock %}
+{% endif %}

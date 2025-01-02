@@ -1,0 +1,40 @@
+{% if todos %}
+ 
+  <div class="flex flex-col gap-2 sortable" id="todos">
+    {% for todo in todos  %}
+      {% include "partials/todo.html" %}
+    {% endfor %}
+    <script>
+      var sortables = document.querySelectorAll(".sortable");
+      
+      for (var i = 0; i < sortables.length; i++) {
+        var sortable = sortables[i];
+        var sortableInstance = new Sortable(sortable, {
+            draggable: '.draggable',
+            handle:'.handle',
+            animation: 150,
+            chosenClass: 'dragClass',
+            // Make the `.htmx-indicator` unsortable
+            filter: ".htmx-indicator",
+            onMove: function (evt) {
+              return evt.related.className.indexOf('htmx-indicator') === -1;
+            },
+
+            // Disable sorting on the `end` event
+            onEnd: function (evt) {
+              this.option("disabled", true);
+            }
+        });
+        // Re-enable sorting on the `htmx:afterSwap` event
+        sortable.addEventListener("htmx:afterSwap", function() {
+          sortableInstance.option("disabled", false);
+        });
+      }
+    </script>
+  </div>  
+   
+{% else %}
+  <div class="space-y-2 my-2 sortable" id="todos">
+    <div class="text-center">No Todos</div>
+  </div>  
+{% endif %}
